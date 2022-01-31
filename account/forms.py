@@ -2,21 +2,16 @@ from django import forms
 from django.contrib.auth.models import User
 
 
-
-
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(max_length=8,
                                required=True,
                                widget=forms.PasswordInput)
-    password_confirmation = forms.CharField(max_length=8,
-                               required=True,
-                               widget=forms.PasswordInput)
+    password_confirmation = forms.CharField(max_length=8, required=True, widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'password_confirmation',
                   'first_name', 'last_name', 'image')
-
 
     def clean(self):
         data = self.cleaned_data
@@ -25,7 +20,6 @@ class RegisterForm(forms.ModelForm):
         if password != password_conf:
             raise forms.ValidationError('Passwords do not match')
         return data
-
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
