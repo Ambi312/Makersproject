@@ -10,8 +10,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password_confirmation',
-                  'first_name', 'last_name', 'image')
+        fields = ('username', 'email', 'password', 'password_confirmation')
 
     def clean(self):
         data = self.cleaned_data
@@ -26,7 +25,6 @@ class RegisterForm(forms.ModelForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('User with such email already exists')
         return email
-
 
     def save(self, commit=True):
         user = User.objects.create_user(**self.cleaned_data)
