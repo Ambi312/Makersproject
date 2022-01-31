@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     # my app
     'account',
     'oursite',
+
 ]
 
 MIDDLEWARE = [
