@@ -19,3 +19,7 @@ class Author(models.Model):
         return self.title
 
 
+class Image(models.Model):
+    image = models.ImageField(upload_to='posts')
+    post_image = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='images')
+
