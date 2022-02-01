@@ -29,20 +29,20 @@ class SearchListView(ListView):
 
 class PostListView(ListView):
     model = Post
-    template_name = 'index.html'
+    template_name = 'oursite/index.html'
     context_object_name = 'posts'
 
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = 'detail.html'
+    template_name = 'oursite/detail.html'
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
 
 
 class PostCreateView(CreateView):
     model = Post
-    template_name = 'create_post.html'
+    template_name = 'oursite/create_post.html'
     form_class = CreatePostForm
 
     def get_context_data(self, **kwargs):
@@ -53,7 +53,7 @@ class PostCreateView(CreateView):
 
 class PostUpdateView(UpdateView):
     model = Post
-    template_name = 'update_post.html'
+    template_name = 'oursite/update_post.html'
     form_class = UpdatePostForm
     pk_url_kwarg = 'post_id'
 
