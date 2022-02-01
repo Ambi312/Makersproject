@@ -1,25 +1,33 @@
-from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
-class Author(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    text = models.TextField()
+class Post(models.Model):
+    slug = models.SlugField(primary_key=True)
+    name = models.CharField(max_length=155)
+    title = models.CharField(max_length=55, unique=True)
+    image = models.ImageField(upload_to='post_images', null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
-    image = models.ImageField(blank=True, null=True, upload_to='authors')
+
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'post_id': self.pk})
+
+    def __str__(self):
+        return self.name
 
     def publish(self):
         self.published_date = timezone.now()
         self.save()
 
-    def __str__(self):
-        return self.title
+    class Meta:
+        ordering = ('name',)
 
 
-class Image(models.Model):
-    image = models.ImageField(upload_to='posts')
-    post_image = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='images')
-
+# class Image(models.Model):
+#     image = models.ImageField(upload_to='posts')
+#     post_image = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
+#
+#     def __str__(self):
+#         return self.image.url
