@@ -5,6 +5,7 @@ admin.site.register(Post)
 admin.site.register(Comment)
 
 
+
 class ImageInLineAdmin(admin.TabularInline):
     model = Image
     fields = ('image',)
