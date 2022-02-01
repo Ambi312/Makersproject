@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.http import request
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import CreatePostForm, UpdatePostForm
-from .models import Post
+from .forms import CreatePostForm, UpdatePostForm, ImageForm
+from .models import *
+from django.forms import modelformset_factory
 
 
 class SearchListView(ListView):
@@ -41,6 +43,23 @@ class PostDetailView(DetailView):
 
 
 class PostCreateView(CreateView):
+    def add_post(request):
+        ImageFormSet = modelformset_factory(Image, form=ImageForm, max_num=5)
+        if request.method == 'POST':
+            post_form = CreatePostForm(request.POST)
+            formset = ImageFormSet(request.POST, request.FILES, queryset=Image.objects.none())
+            if post_form.is_valid() and formset.is_valid():
+                post = post_form.save()
+
+                for form in formset.cleaned_data:
+                    image = form['image']
+                    Image.objects.create(image=image, post=post)
+                return redirect(post.get_absolute_url())
+        else:
+            post_form = CreatePostForm()
+            formset = ImageFormSet(queryset=Image.objects.none())
+        return render(request, 'create_post.html', locals())
+
     model = Post
     template_name = 'oursite/create_post.html'
     form_class = CreatePostForm
@@ -52,6 +71,7 @@ class PostCreateView(CreateView):
 
 
 class PostUpdateView(UpdateView):
+    ImageFormset = modelformset_factory(Image, form=ImageForm, max_num=5)
     model = Post
     template_name = 'oursite/update_post.html'
     form_class = UpdatePostForm
@@ -63,7 +83,7 @@ class PostUpdateView(UpdateView):
         return context
 
 
-class PostDeleteView(DetailView):
+class PostDeleteView(DeleteView):
     model = Post
     template_name = 'delete_post.html'
     pk_url_kwarg = 'post_id'
