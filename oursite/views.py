@@ -93,3 +93,6 @@ class PostDeleteView(DeleteView):
         slug = self.object.category.slug
         self.object.delete()
         return redirect('list', slug)
+
+
+
