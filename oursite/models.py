@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 class Post(models.Model):
-    slug = models.SlugField(primary_key=True)
+    post = models.SlugField(primary_key=True)
     name = models.CharField(max_length=155)
     title = models.CharField(max_length=55, unique=True)
     image = models.ImageField(upload_to='post_images', null=True, blank=True)
@@ -25,6 +25,21 @@ class Post(models.Model):
         ordering = ('name',)
 
 
+# class Comment(models.Model):
+#     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+#     name = models.CharField(max_length=55)
+#     body = models.TextField()
+#     created_date = models.DateTimeField(default=timezone.now)
+#     published_date = models.DateTimeField(blank=True, null=True)
+#     active = models.BooleanField(default=True)
+#
+#     class Meta:
+#         ordering = ('created',)
+#
+#     def __str__(self):
+#         return self.name, self.post
+#
+#
 # class Image(models.Model):
 #     image = models.ImageField(upload_to='posts')
 #     post_image = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
