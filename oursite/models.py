@@ -11,6 +11,9 @@ class Post(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
 
+    def get_image(self):
+        return self.images.first()
+
     def get_absolute_url(self):
         return reverse('detail', kwargs={'post_id': self.pk})
 
@@ -21,28 +24,23 @@ class Post(models.Model):
         self.published_date = timezone.now()
         self.save()
 
-    class Meta:
-        ordering = ('name',)
+
+class Image(models.Model):
+    image = models.ImageField(upload_to='recipes')
+    recipe = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
+
+    def __str__(self):
+        return self.image.url
 
 
-# class Comment(models.Model):
-#     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
-#     name = models.CharField(max_length=55)
-#     body = models.TextField()
-#     created_date = models.DateTimeField(default=timezone.now)
-#     published_date = models.DateTimeField(blank=True, null=True)
-#     active = models.BooleanField(default=True)
-#
-#     class Meta:
-#         ordering = ('created',)
-#
-#     def __str__(self):
-#         return self.name, self.post
-#
-#
-# class Image(models.Model):
-#     image = models.ImageField(upload_to='posts')
-#     post_image = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
-#
-#     def __str__(self):
-#         return self.image.url
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    name = models.CharField(max_length=55)
+    body = models.TextField()
+    created_date = models.DateTimeField(default=timezone.now)
+    published_date = models.DateTimeField(blank=True, null=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name, self.post
+
