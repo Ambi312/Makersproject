@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from django import forms
 from .models import *
 
@@ -22,3 +21,9 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ('image',)
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('name', 'email', 'body')

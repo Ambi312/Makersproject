@@ -1,9 +1,11 @@
-from django.http import request
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import CreatePostForm, UpdatePostForm, ImageForm
 from .models import *
 from django.forms import modelformset_factory
+from .models import Post
+from .forms import CommentForm
+from django.shortcuts import render, get_object_or_404
 
 
 class SearchListView(ListView):
@@ -37,29 +39,12 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = 'oursite/detail.html'
+    template_name = 'oursite/post_detail.html'
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
 
 
 class PostCreateView(CreateView):
-    def add_post(request):
-        ImageFormSet = modelformset_factory(Image, form=ImageForm, max_num=5)
-        if request.method == 'POST':
-            post_form = CreatePostForm(request.POST)
-            formset = ImageFormSet(request.POST, request.FILES, queryset=Image.objects.none())
-            if post_form.is_valid() and formset.is_valid():
-                post = post_form.save()
-
-                for form in formset.cleaned_data:
-                    image = form['image']
-                    Image.objects.create(image=image, post=post)
-                return redirect(post.get_absolute_url())
-        else:
-            post_form = CreatePostForm()
-            formset = ImageFormSet(queryset=Image.objects.none())
-        return render(request, 'create_post.html', locals())
-
     model = Post
     template_name = 'oursite/create_post.html'
     form_class = CreatePostForm
@@ -90,9 +75,31 @@ class PostDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        slug = self.object.category.slug
+        post = self.object.category.post
         self.object.delete()
-        return redirect('list', slug)
+        return redirect('list', post)
 
 
+def post_detail(request, slug):
+    template_name = 'post_detail.html'
+    post = get_object_or_404(Post, slug=slug)
+    comments = post.comments.filter(active=True)
+    new_comment = None
+    # Comment posted
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
 
+            # Create Comment object but don't save to database yet
+            new_comment = comment_form.save(commit=False)
+            # Assign the current post to the comment
+            new_comment.post = post
+            # Save the comment to the database
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+
+    return render(request, template_name, {'post': post,
+                                           'comments': comments,
+                                           'new_comment': new_comment,
+                                           'comment_form': comment_form})
