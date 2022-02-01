@@ -1,5 +1,9 @@
+from xml.etree.ElementInclude import include
+
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
+from django.views.generic import TemplateView
+
 from account.views import RegisterView
 
 urlpatterns = [
