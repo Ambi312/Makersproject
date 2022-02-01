@@ -14,6 +14,7 @@ class CommentAdmin(admin.ModelAdmin):
         queryset.update(active=True)
 
 
+
 class ImageInLineAdmin(admin.TabularInline):
     model = Image
     fields = ('image',)

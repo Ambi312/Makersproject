@@ -1,3 +1,4 @@
+
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import CreatePostForm, UpdatePostForm, ImageForm
@@ -5,7 +6,11 @@ from .models import *
 from django.forms import modelformset_factory
 from .models import Post
 from .forms import CommentForm
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .forms import CreatePostForm, UpdatePostForm
+from .models import Post
+
 
 
 class SearchListView(ListView):
@@ -56,7 +61,6 @@ class PostCreateView(CreateView):
 
 
 class PostUpdateView(UpdateView):
-    ImageFormset = modelformset_factory(Image, form=ImageForm, max_num=5)
     model = Post
     template_name = 'oursite/update_post.html'
     form_class = UpdatePostForm
@@ -68,7 +72,7 @@ class PostUpdateView(UpdateView):
         return context
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(DetailView):
     model = Post
     template_name = 'delete_post.html'
     pk_url_kwarg = 'post_id'
@@ -103,3 +107,10 @@ def post_detail(request, slug):
                                            'comments': comments,
                                            'new_comment': new_comment,
                                            'comment_form': comment_form})
+        return redirect('list', slug)
+
+
+def like_button(request):
+   ctx={"hello":"hello"}
+   return render(request,"like/like_template.html",ctx)
+
