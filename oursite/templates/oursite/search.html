@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+    <div class="container card-group">
+   {% if not results %}
+        <h1>По запросу "{{ search_word }}" ничего не найдено</h1>
+        {% else %}
+        <div style="display: flex; flex-wrap: wrap;">
+    {% for post in results %}
+          <div style="background-color: ; border: none;" class="card">
+            <img style="width: 200px; height: auto;" src="{{ post.image.url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">
+                  <a href="{% url 'detail' post.id %}">{{ post.name }}</a>
+              </h5>
+            </div>
 
-</body>
-</html>
+          </div>
+    {% endfor %}
+            </div>
+   {% endif %}
+        </div>
+{% endblock %}

@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load statick %}
+{% block content %}
+  <h1>Create Post</h1>
 
-</body>
-</html>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ post_form.as_p }}
+    <button type="submit" class="btn btn-success">Create</button>
+  </form>
+{% endblock %}
