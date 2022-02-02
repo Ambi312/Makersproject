@@ -20,17 +20,13 @@
 			<!-- Post -->
 				<article class="box post post-excerpt">
 					<header>
-						<!--
-							Note: Titles and subtitles will wrap automatically when necessary, so don't worry
-							if they get too long. You can also remove the <p> entirely if you don't
-							need a subtitle.
-						-->
-						<h2><a href="#">Welcome to Memes</a></h2>
+						{% for post in posts %}
+						<h2><a href="#">{{ post }}</a></h2>
+						<img src="{{ post.image.url }}" >
 						<p></p>
+						{% endfor %}
 					</header>
 					<div class="info">
-						<span class="date"><span class="month">Jul<span>y</span></span> <span class="day">14</span><span class="year">, 2014</span></span>
-
 						<ul class="stats">
 							<li><a href="#" class="icon fa-comment">16</a></li>
 							<li><a href="#" class="icon fa-heart">32</a></li>
@@ -39,7 +35,9 @@
 						</ul>
 					</div>
 					<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+					{% for com in comments %}
 					<p>
+
 						<strong>Hello!</strong>  <strong></strong>,  <a href="http://twitter.com/ajlkn"></a>
 						 <a href=""></a> .
 					</p>
@@ -47,7 +45,11 @@
 						 <a href="http://html5up.net/license">Creative Commons Attribution license</a>
 						 <a href="http://html5up.net">HTML5 UP</a>
 						<a href="http://html5up.net">HTML5 UP</a>  <a href="http://twitter.com/ajlkn"></a>
+
+						{{ com }}
+
 					</p>
+					{% endfor %}
 				</article>
 
 			<!-- Post -->
@@ -96,7 +98,7 @@
 		<div id="sidebar">
 
 			<!-- Logo -->
-				<h1 id="logo"><a href="#">Memes</a></h1>
+				<h1 id="logo"><a href="{% url 'home' %}">Memes</a></h1>
 
 			<!-- Nav -->
 				<nav class="navbar navbar-light" style="background-color: #364050;">
@@ -123,8 +125,7 @@
 				<section class="box text-style1">
 					<div class="inner">
 						<p>
-							<strong>Striped:</strong> A free and fully responsive HTML5 site
-							template designed by <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net/">HTML5 UP</a>
+							 <h4>Create Post</h4>
 						</p>
 					</div>
 				</section>
