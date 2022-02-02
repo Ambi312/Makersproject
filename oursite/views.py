@@ -12,7 +12,6 @@ from .forms import CreatePostForm, UpdatePostForm
 from .models import Post
 
 
-
 class SearchListView(ListView):
     model = Post
     template_name = 'search.html'
@@ -84,9 +83,9 @@ class PostDeleteView(DetailView):
         return redirect('list', post)
 
 
-def post_detail(request, slug):
+def post_detail(request, post):
     template_name = 'post_detail.html'
-    post = get_object_or_404(Post, slug=slug)
+    post = get_object_or_404(Post, slug=post)
     comments = post.comments.filter(active=True)
     new_comment = None
     # Comment posted
@@ -107,7 +106,7 @@ def post_detail(request, slug):
                                            'comments': comments,
                                            'new_comment': new_comment,
                                            'comment_form': comment_form})
-        return redirect('list', slug)
+    return redirect('list', slug)
 
 
 def like_button(request):
