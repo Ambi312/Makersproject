@@ -1,4 +1,41 @@
 {% extends 'base.html' %}
-{% load static %}
+
 {% block content %}
+<!-- Content -->
+	<div id="content">
+		<div class="inner">
+			<!-- Post -->
+			{% for post in posts %}
+				<article class="box post post-excerpt">
+					<header>
+						<h2><a href="#">{{ post }}</a></h2>
+						<img src="{{ post.image.url }}" >
+					</header>
+					<div class="info">
+						<ul class="stats">
+							<li><a href="#" class="icon fa-comment">16</a></li>
+							<li><a href="#" class="icon fa-heart">32</a></li>
+							<li><a href="https://twitter.com/" class="icon brands fa-twitter">122</a></li>
+							<li><a href="https://www.instagram.com/" class="icon brands fa-instagram">333</a></li>
+						</ul>
+					</div>
+					{% endfor %}
+				</article>
+			<!-- Pagination -->
+			<nav aria-label="...">
+  <ul class="pagination pagination-sm">
+	  {% if page_obj.has_previous %}
+	   <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+		{% endif %}
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">{{ page_obj.number }}</span>
+    </li>
+	{% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+    {% endif %}
+  </ul>
+</nav>
+</div>
+</div>
 {% endblock %}
+
