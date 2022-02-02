@@ -1,10 +1,3 @@
-
-from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import CreatePostForm, UpdatePostForm, ImageForm
-from .models import *
-from django.forms import modelformset_factory
-from .models import Post
 from .forms import CommentForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -42,12 +35,11 @@ class PostListView(ListView):
     paginate_by = 4
 
 
-
 class PostDetailView(DetailView):
     model = Post
     template_name = 'oursite/post_detail.html'
     context_object_name = 'post'
-    pk_url_kwarg = 'post_id'
+    pk_url_kwarg = 'pk'
 
 
 class PostCreateView(CreateView):
@@ -73,7 +65,7 @@ class PostUpdateView(UpdateView):
         return context
 
 
-class PostDeleteView(DetailView):
+class PostDeleteView(DeleteView):
     model = Post
     template_name = 'delete_post.html'
     pk_url_kwarg = 'post_id'
@@ -85,16 +77,15 @@ class PostDeleteView(DetailView):
         return redirect('list', post)
 
 
-def post_detail(request, post):
+def post_detail(request, slug):
     template_name = 'post_detail.html'
-    post = get_object_or_404(Post, slug=post)
+    post = get_object_or_404(Post, slug=slug)
     comments = post.comments.filter(active=True)
     new_comment = None
     # Comment posted
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
-
             # Create Comment object but don't save to database yet
             new_comment = comment_form.save(commit=False)
             # Assign the current post to the comment
@@ -108,7 +99,6 @@ def post_detail(request, post):
                                            'comments': comments,
                                            'new_comment': new_comment,
                                            'comment_form': comment_form})
-    return redirect('list', slug)
 
 
 def like_button(request):
