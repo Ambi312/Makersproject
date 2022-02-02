@@ -1,9 +1,9 @@
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
 from .forms import RegisterForm
 
 
@@ -18,6 +18,12 @@ class RegisterView(CreateView):
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('index')
 
+
+# class ProfileView(DetailView):
+#     model = User
+#     template_name = 'registration/profile.html'
+def profile(request):
+    return render(request, 'registration/profile.html')
 
 
 
