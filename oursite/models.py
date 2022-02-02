@@ -5,7 +5,7 @@ from django.utils import timezone
 
 
 class Post(models.Model):
-    post = models.SlugField(primary_key=True)
+    post = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=155)
     title = models.CharField(max_length=55, unique=True)
     image = models.ImageField(upload_to='post_images', null=True, blank=True)
@@ -44,7 +44,6 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['created_on']
-
 
     def __str__(self):
         return 'Comment {} by {}'.format(self.body, self.name)
