@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+
 {% load static %}
 <html>
 <head>
@@ -37,7 +37,17 @@
 					<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
 					{% for com in comments %}
 					<p>
+
+						<strong>Hello!</strong>  <strong></strong>,  <a href="http://twitter.com/ajlkn"></a>
+						 <a href=""></a> .
+					</p>
+					<p>
+						 <a href="http://html5up.net/license">Creative Commons Attribution license</a>
+						 <a href="http://html5up.net">HTML5 UP</a>
+						<a href="http://html5up.net">HTML5 UP</a>  <a href="http://twitter.com/ajlkn"></a>
+
 						{{ com }}
+
 					</p>
 					{% endfor %}
 				</article>
@@ -52,7 +62,7 @@
 						<span class="date"><span class="month">Jul<span>y</span></span> <span class="day">8</span><span class="year">, 2014</span></span>
 						<ul class="stats">
 							<li><a href="#" class="icon fa-comment">16</a></li>
-							<li><a href="{% url 'like_button:like' %}" class="icon fa-heart">{{ like_button }}</a></li>
+							<li><a href="{% url 'like_button:like' %}" class="icon fa-heart">{{ like_submit }}</a></li>
 							<li><a href="#" class="icon brands fa-twitter">64</a></li>
 							<li><a href="#" class="icon brands fa-facebook-f">128</a></li>
 						</ul>
@@ -67,18 +77,19 @@
 				</article>
 
 			<!-- Pagination -->
-				<div class="pagination">
-					<!--<a href="#" class="button previous">Previous Page</a>-->
-					<div class="pages">
-						<a href="#" class="active">1</a>
-						<a href="#">2</a>
-						<a href="#">3</a>
-						<a href="#">4</a>
-						<span>&hellip;</span>
-						<a href="#">20</a>
-					</div>
-					<a href="#" class="button next">Next Page</a>
-				</div>
+			<nav aria-label="...">
+  <ul class="pagination pagination-sm">
+	  {% if page_obj.has_previous %}
+	   <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+		{% endif %}
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">{{ page_obj.number }}</span>
+    </li>
+	{% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+    {% endif %}
+  </ul>
+</nav>
 
 		</div>
 	</div>
@@ -105,8 +116,8 @@
 
 			<!-- Search -->
 				<section class="box search">
-					<form method="post" action="#">
-						<input type="text" class="text" name="search" placeholder="Search" />
+					<form method="get" action="{% url 'home' %}">
+						<input type="text" class="text" name="q" id="query" placeholder="Search" />
 					</form>
 				</section>
 

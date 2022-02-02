@@ -39,6 +39,8 @@ class PostListView(ListView):
     model = Post
     template_name = 'oursite/index.html'
     context_object_name = 'posts'
+    paginate_by = 4
+
 
 
 class PostDetailView(DetailView):
@@ -110,6 +112,6 @@ def post_detail(request, post):
 
 
 def like_button(request):
-   ctx={"hello":"hello"}
-   return render(request,"like/like_template.html",ctx)
+   ctx = {"hello": "hello"}
+   return render(request, "like/like_template.html", ctx)
 

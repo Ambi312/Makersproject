@@ -1,4 +1,6 @@
-{% load static %}
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
 
 <div style="display: flex; justify-content: flex-end;">
     <a href="{% url 'list' slug %}?filter=in+stock">In stock</a>
