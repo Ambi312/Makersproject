@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 {% load static %}
 <html>
 <head>
@@ -22,7 +22,7 @@
 					<header>
 						{% for post in posts %}
 						<h2><a href="#">{{ post }}</a></h2>
-						<img src="{{ post.image.url }}" >
+						<img style="width: 400px; height: auto" src="{{ post.image.url }}" >
 						<p></p>
 						{% endfor %}
 					</header>
