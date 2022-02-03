@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 	<section id="banner">
         <div class="content">
@@ -14,7 +14,11 @@
 
         </div>
         <span class="image object">
-            <img src="{{ request.user.image.url }}" style="width: 500px; height: 500px" alt="" />
+            {% if user.image %}
+                <img src="{{ request.user.image.url }}" style="width: 500px; height: 500px" alt="" />
+            {% else %}
+                <img src="{% static 'default.jpg' %}" style="width: 200px; height: auto" alt="" />
+            {% endif %}
         </span>
     </section>
 {% endblock %}

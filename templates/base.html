@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap" rel="stylesheet">
+
 </head>
 <body class="is-preload">
 {% block content %}{% endblock %}
@@ -59,7 +60,7 @@
 						<h2>Recent Posts</h2>
 					</header>
 					<ul>
-						<li><a href="{% url 'home' %}?filter=new">New post</a></li>
+						<li><a href="{% url 'home' %}?filter=new">New posts</a></li>
 						{% if request.user.is_authenticated %}
 						<li><a href="{% url 'profile' %}">My Profile</a></li>
 						{% endif %}

@@ -22,7 +22,7 @@ class Post(models.Model):
         self.save()
 
     class Meta:
-        ordering = ('post',)
+        ordering = ('created_date',)
 
 
 class Image(models.Model):

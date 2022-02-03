@@ -1,9 +1,6 @@
 from datetime import timedelta
-
 from django.db.models import Q
-from django.urls import reverse
 from django.utils import timezone
-
 from .forms import CommentForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -46,6 +43,12 @@ class PostDetailView(DetailView):
     template_name = 'oursite/post_detail.html'
     context_object_name = 'post'
     pk_url_kwarg = 'pk'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        image = self.get_object().image
+        context['images'] = self.get_object().images.all()
+        return context
 
 
 class PostCreateView(CreateView):
