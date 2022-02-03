@@ -6,18 +6,22 @@
 </div>
     <div class="post_detail">
         {% if post.image %}
-                {{ post.created_date }}
-                {{ post.post }}
-                {{ post.title }}
+                <h2>{{ post.post }}</h2>
+                <h4>{{ post.title }}</h4>
+
             <img src="{{ post.image.url }}" style="width: 300px; height: auto; padding: 10px;">
         {% else %}
             <img src="{% static 'default.jpg' %}"style="width: 300px; height: auto; padding: 10px;">
         {% endif %}
-        <h4>{{ post.name }}</h4>
-        {% if request.user.is_authenticated %}
+        {% for image in images %}
+            <div class="text-center"><img src="{{ image }}" class="rounded" alt="..."></div>
+        {% endfor %}
+        {% if request.user.is_authenticated and post.user == request.user  %}
         <a class="btn btn-info" href="{% url 'update' post.id %}" role="button">Update</a>
         <a class="btn btn-danger" href="{% url 'delete' post.id %}" role="button">Delete</a>
         {% endif %}
+        <h5>{{ post.created_date }}</h5>
     </div>
+
 
 {% endblock %}
