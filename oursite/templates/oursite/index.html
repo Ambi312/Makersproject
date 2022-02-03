@@ -1,15 +1,18 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <!-- Content -->
 	<div id="content">
 		<div class="inner">
 			<!-- Post -->
 			{% for post in posts %}
+			{{ post.pk }}
 				<article class="box post post-excerpt">
 					<header>
-						<h2><a href="#" style="padding: 10px">{{ post }}</a></h2>
+						{{ post.created_date }}
+						<h2><a href="{% url 'post_detail' pk=post.pk %}" style="padding: 10px">{{ post.post }}</a></h2>
 						<a  href="" class="image"> <img src="{{ post.image.url }}" style="width: 400px; height: auto; padding: 10px;" ></a>
+						<p>{{ post.text|linebreaksbr }}</p>
 					</header>
 					<div class="info">
 						<ul class="stats">
@@ -33,6 +36,7 @@
 	{% if page_obj.has_next %}
     <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
     {% endif %}
+
   </ul>
 </nav>
 </div>

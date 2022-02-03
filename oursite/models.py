@@ -1,19 +1,17 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
 
 class Post(models.Model):
-    post = models.CharField(primary_key=True, max_length=100)
+    post = models.CharField(max_length=100)
     name = models.CharField(max_length=155)
-    title = models.CharField(max_length=55, unique=True)
+    title = models.CharField(max_length=55)
     image = models.ImageField(upload_to='post_images', null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
 
-
     def get_absolute_url(self):
-        return reverse('post_detail', kwargs={'post_id': self.pk})
+        return reverse('post_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
