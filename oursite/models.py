@@ -1,9 +1,13 @@
+
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
+from account.models import User
+
 
 class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     post = models.CharField(max_length=100)
     name = models.CharField(max_length=155)
     title = models.CharField(max_length=55)
