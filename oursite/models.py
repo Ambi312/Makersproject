@@ -13,7 +13,7 @@ class Post(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse('detail', kwargs={'post_id': self.pk})
+        return reverse('post_detail', kwargs={'post_id': self.pk})
 
     def __str__(self):
         return self.name

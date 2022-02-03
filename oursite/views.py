@@ -106,7 +106,5 @@ def post_detail(request, slug):
                                            'comment_form': comment_form})
 
 
-def like_button(request):
-   ctx = {"hello": "hello"}
-   return render(request, "like/like_template.html", ctx)
+
 
