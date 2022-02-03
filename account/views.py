@@ -11,12 +11,12 @@ class RegisterView(CreateView):
     model = User
     template_name = 'registration/register.html'
     form_class = RegisterForm
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         user = form.save()
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('index')
+        return redirect('home')
 
 
 # class ProfileView(DetailView):
@@ -24,6 +24,12 @@ class RegisterView(CreateView):
 #     template_name = 'registration/profile.html'
 def profile(request):
     return render(request, 'registration/profile.html')
+
+
+class SingInView(LoginView):
+    template_name = 'registration/login.html'
+    success_url = reverse_lazy('home')
+
 
 
 
