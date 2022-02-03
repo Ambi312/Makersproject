@@ -8,13 +8,18 @@ class CreatePostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = '__all__'
+        exclude = ('user',)
 
+    # def save(self, commit=True):
+    #     user = self.request.user
+    #     post = Post.objects.create(**self.cleaned_data)
+    #     post.user = user
+    #     return post
 
 class UpdatePostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = '__all__'
+        exclude = ('user',)
 
 
 class ImageForm(forms.ModelForm):
