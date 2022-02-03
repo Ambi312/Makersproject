@@ -4,9 +4,8 @@ from django.utils import timezone
 
 
 class Post(models.Model):
-    post = models.CharField(max_length=100)
-    name = models.CharField(max_length=155)
-    title = models.CharField(max_length=55)
+    post = models.CharField(max_length=50)
+    title = models.CharField(max_length=250)
     image = models.ImageField(upload_to='post_images', null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
 
@@ -14,14 +13,14 @@ class Post(models.Model):
         return reverse('post_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return self.name
+        return self.post
 
     def publish(self):
         self.published_date = timezone.now()
         self.save()
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('post',)
 
 
 class Image(models.Model):

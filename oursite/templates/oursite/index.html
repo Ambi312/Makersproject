@@ -11,7 +11,11 @@
 					<header>
 						{{ post.created_date }}
 						<h2><a href="{% url 'post_detail' pk=post.pk %}" style="padding: 10px">{{ post.post }}</a></h2>
-						<a  href="" class="image"> <img src="{{ post.image.url }}" style="width: 400px; height: auto; padding: 10px;" ></a>
+						{% if post.image %}
+							<a  href="{% url 'post_detail' pk=post.pk %}" class="image"> <img src="{{ post.image.url }}" style="width: 300px; height: auto; padding: 10px;" ></a>
+						{% else %}
+							<a  href="{% url 'post_detail' pk=post.pk %}" class="image"> <img src="{% static 'default.jpg' %}" style="width: 300px; height: auto; padding: 10px;"></a>
+						{% endif %}
 						<p>{{ post.text|linebreaksbr }}</p>
 					</header>
 					<div class="info">
