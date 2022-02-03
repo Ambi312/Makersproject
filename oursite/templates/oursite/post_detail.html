@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
 <div style="background-color: #ff8732; height: 150px; ">
 </div>
     <div class="post_detail">
-        <img src="{{ post.image.url }}">
+        {% if post.image %}
+                {{ post.created_date }}
+                {{ post.post }}
+                {{ post.title }}
+            <img src="{{ post.image.url }}" style="width: 300px; height: auto; padding: 10px;">
+        {% else %}
+            <img src="{% static 'default.jpg' %}"style="width: 300px; height: auto; padding: 10px;">
+        {% endif %}
         <h4>{{ post.name }}</h4>
         {% if request.user.is_authenticated %}
         <a class="btn btn-info" href="{% url 'update' post.id %}" role="button">Update</a>
