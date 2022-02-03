@@ -1,3 +1,8 @@
+from datetime import timedelta
+
+from django.db.models import Q
+from django.utils import timezone
+
 from .forms import CommentForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -5,34 +10,34 @@ from .forms import CreatePostForm, UpdatePostForm
 from .models import Post
 
 
-class SearchListView(ListView):
-    model = Post
-    template_name = 'search.html'
-    context_object_name = 'results'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(SearchListView, self).get_context_data()
-        context['search_word'] = self.request.GET.get('q')
-        return context
-
-    def get_queryset(self):
-        queryset = super(SearchListView, self).get_queryset()
-        search_word = self.request.GET.get('q')
-        if not search_word:
-            queryset = Post.objects.none()
-        else:
-            if len(search_word) < 3:
-                queryset = Post.objects.none()
-            else:
-                queryset = queryset.filter(name__icontains=search_word)
-        return queryset
-
-
 class PostListView(ListView):
     model = Post
     template_name = 'oursite/index.html'
     context_object_name = 'posts'
     paginate_by = 4
+
+    def get_template_names(self):
+        template_name = super(PostListView, self).get_template_names()
+        search = self.request.GET.get('q')
+        if search:
+            template_name = 'oursite/search.html'
+        return template_name
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        search = self.request.GET.get('q')
+        filter = self.request.GET.get('filter')
+        if search:
+            context['posts'] = Post.objects.filter(Q(name__icontains=search)|
+                                                   Q(title__icontains=search))
+        elif filter:
+            start_date = timezone.now() - timedelta(days=1)
+            context['posts'] = Post.objects.filter(created_date__gte=start_date)
+
+        else:
+            context['posts'] = Post.objects.all()
+        return context
+
 
 
 class PostDetailView(DetailView):

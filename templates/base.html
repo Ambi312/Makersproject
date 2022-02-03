@@ -22,13 +22,10 @@
 
 			<!-- Nav -->
 				<nav class="navbar navbar-light" style="background-color: #364050;">
-					{% if request.user.is_authenticated %}
-						<li><a href="{% url 'profile' %}">My Profile</a></li>
-					{% endif %}
 					<div class="container-fluid">
 						{% if not request.user.is_authenticated %}
-							<a href="{% url 'register' %}">Sign Up</a>
-							<a href="{% url 'login' %}">Sign In</a>
+							<a href="{% url 'register' %}">Registration</a>
+							<a href="{% url 'login' %}">Log In</a>
 					  	{% else %}
 							<span>{{ request.user.username }}</span>
 							</a>
@@ -62,8 +59,10 @@
 						<h2>Recent Posts</h2>
 					</header>
 					<ul>
-						<li><a href="#">Lorem ipsum dolor</a></li>
-						<li><a href="#">Feugiat nisl aliquam</a></li>
+						<li><a href="{% url 'home' %}?filter=new">New post</a></li>
+						{% if request.user.is_authenticated %}
+						<li><a href="{% url 'profile' %}">My Profile</a></li>
+						{% endif %}
 						<li><a href="#">Sed dolore magna</a></li>
 						<li><a href="#">Malesuada commodo</a></li>
 						<li><a href="#">Ipsum metus nullam</a></li>

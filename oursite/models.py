@@ -10,7 +10,7 @@ class Post(models.Model):
     title = models.CharField(max_length=55, unique=True)
     image = models.ImageField(upload_to='post_images', null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
-    published_date = models.DateTimeField(blank=True, null=True)
+
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'post_id': self.pk})
