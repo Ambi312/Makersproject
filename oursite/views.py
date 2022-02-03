@@ -9,6 +9,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import CreatePostForm, UpdatePostForm
 from .models import Post
+from .permissions import UserHasPermissionMixin
 
 
 class PostListView(ListView):
@@ -29,7 +30,7 @@ class PostListView(ListView):
         search = self.request.GET.get('q')
         filter = self.request.GET.get('filter')
         if search:
-            context['posts'] = Post.objects.filter(Q(name__icontains=search)|
+            context['posts'] = Post.objects.filter(Q(post__icontains=search)|
                                                    Q(title__icontains=search))
         elif filter:
             start_date = timezone.now() - timedelta(days=1)
@@ -58,7 +59,7 @@ class PostCreateView(CreateView):
         return context
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(UserHasPermissionMixin, UpdateView):
     model = Post
     template_name = 'oursite/update_post.html'
     form_class = UpdatePostForm
@@ -70,7 +71,7 @@ class PostUpdateView(UpdateView):
         return context
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(UserHasPermissionMixin, DeleteView):
     model = Post
     template_name = 'oursite/delete_post.html'
     pk_url_kwarg = 'post_id'
