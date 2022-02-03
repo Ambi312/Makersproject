@@ -1,11 +1,13 @@
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from account.models import User
 
 
 class Post(models.Model):
     post = models.CharField(max_length=50)
     title = models.CharField(max_length=250)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     image = models.ImageField(upload_to='post_images', null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
 
@@ -43,5 +45,5 @@ class Comment(models.Model):
         ordering = ['created_on']
 
     def __str__(self):
-        return 'Comment {} by {}'.format(self.body, self.name)
+        return 'Comment {} by {}'.format(self.post, self.title)
 
