@@ -58,6 +58,13 @@ class PostCreateView(CreateView):
         context['post_form'] = self.get_form()
         return context
 
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.user = self.request.user
+        post.save()
+        return super(PostCreateView, self).form_valid(form)
+
+
 
 class PostUpdateView(UserHasPermissionMixin, UpdateView):
     model = Post

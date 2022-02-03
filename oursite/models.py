@@ -5,9 +5,9 @@ from account.models import User
 
 
 class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     post = models.CharField(max_length=50)
     title = models.CharField(max_length=250)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     image = models.ImageField(upload_to='post_images', null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
 
