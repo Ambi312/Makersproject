@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     # my app
     'account',
     'oursite',
-    'like',
+
 
 ]
 
@@ -138,3 +138,4 @@ LOGIN_REDIRECT_URL = ''
 LOGIN_URL = '/register/login/'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+AUTH_USER_MODEL = 'account.User'
