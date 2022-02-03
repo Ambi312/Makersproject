@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.db.models import Q
+from django.urls import reverse
 from django.utils import timezone
 
 from .forms import CommentForm
@@ -39,7 +40,6 @@ class PostListView(ListView):
         return context
 
 
-
 class PostDetailView(DetailView):
     model = Post
     template_name = 'oursite/post_detail.html'
@@ -72,14 +72,14 @@ class PostUpdateView(UpdateView):
 
 class PostDeleteView(DeleteView):
     model = Post
-    template_name = 'delete_post.html'
+    template_name = 'oursite/delete_post.html'
     pk_url_kwarg = 'post_id'
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        post = self.object.category.post
+        post = self.object.post
         self.object.delete()
-        return redirect('list', post)
+        return redirect('/', )
 
 
 def post_detail(request, slug):
