@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  {% block title %}Comment on Post {% endblock %}
+  {% if user.is_authenticated %}
+  <h1>Add Comment...</h1>
+  <br/><br/>
+  <form method="post">
+
+    {% csrf_token %}
+    {{ post_form.as_p }}
+
+    <button  type="submit" class="btn btn-success">Comment</button>
+  </form>
+{% endif %}
+{% endblock %}

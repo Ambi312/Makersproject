@@ -2,7 +2,11 @@ from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.urls import reverse
 from django.utils import timezone
+
+from django.shortcuts import redirect, get_object_or_404
+
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
@@ -10,10 +14,22 @@ from rest_framework.viewsets import GenericViewSet
 from .forms import CommentForm, UserPostRelationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.http import HttpResponseRedirect
+
 from .forms import CreatePostForm, UpdatePostForm
+
+from .models import Post, Comment
+
 from .models import Post, UserPostRelation
+
 from .permissions import UserHasPermissionMixin
 from cart.cart import Cart
+
+
+def LikeView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.likes.add(request.user)
+    return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))
 
 
 class PostListView(ListView):
@@ -54,7 +70,10 @@ class PostDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         image = self.get_object().image
+        likes = get_object_or_404(Post, id=self.kwargs['pk'])
+        total_likes = likes.total_likes()
         context['images'] = self.get_object().images.all()
+        context['total_likes'] = total_likes
         return context
 
 
@@ -75,6 +94,13 @@ class PostCreateView(CreateView):
         return super(PostCreateView, self).form_valid(form)
 
 
+class CommentCreateView(CreateView):
+    model = Comment
+    template_name = 'oursite/add_comment.html'
+    # form_class = CreatePostForm
+    fields = '__all__'
+
+    
 class PostUpdateView(UserHasPermissionMixin, UpdateView):
     model = Post
     template_name = 'oursite/update_post.html'
@@ -179,3 +205,4 @@ def cart_clear(request):
 @login_required()
 def cart_detail(request):
     return render(request, 'cart/cart_detail.html')
+

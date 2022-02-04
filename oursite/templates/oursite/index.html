@@ -9,19 +9,21 @@
 			{{ post.pk }}
 				<article class="box post post-excerpt">
 					<header>
+						<div class="post_detail">
 						{{ post.created_date }}
-						<h2><a href="{% url 'post_detail' pk=post.pk %}" style="padding: 10px">{{ post.post }}</a></h2>
+						<h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.post }}</a></h2>
 						{% if post.image %}
-							<a  href="{% url 'post_detail' pk=post.pk %}" class="image"> <img src="{{ post.image.url }}" style="width: 300px; height: auto; padding: 10px;" ></a>
+							<a  href="{% url 'post_detail' pk=post.pk %}"  class="image" > <img src="{{ post.image.url }}" style="width: 400px; height: auto; padding: 10px;" ></a>
 						{% else %}
-							<a  href="{% url 'post_detail' pk=post.pk %}" class="image"> <img src="{% static 'default.jpg' %}" style="width: 300px; height: auto; padding: 10px;"></a>
+							<a  href="{% url 'post_detail' pk=post.pk %}" class="image"> <img src="{% static 'default.jpg' %}" style="width: 400px; height: auto; padding: 10px;"></a>
 						{% endif %}
 						<p>{{ post.text|linebreaksbr }}</p>
+						</div>
 					</header>
 					<div class="info">
 						<ul class="stats">
-							<li><a href="#" class="icon fa-comment">16</a></li>
-							<li><a href="#" class="icon fa-heart">32</a></li>
+							<li><a href="{% url 'post_detail' pk=post.pk %}" class="icon fa-comment">{{ post.pk }}</a></li>
+							<li><a href="#" class="icon fa-heart">0</a></li>
 							<li><a href="https://twitter.com/" class="icon brands fa-twitter">122</a></li>
 							<li><a href="https://www.instagram.com/" class="icon brands fa-instagram">333</a></li>
 						</ul>

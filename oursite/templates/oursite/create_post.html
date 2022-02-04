@@ -20,8 +20,10 @@
 </style>
   {% if user.is_authenticated %}
   <form method="post" enctype="multipart/form-data">
+
     {% csrf_token %}
     <p>{{ post_form.as_p }}</p>
+
     <button  type="submit" class="btn btn-success">Create</button>
   </form>
 {% endif %}
