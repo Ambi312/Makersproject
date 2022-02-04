@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    *{
+    	font-family: 'Mochiy Pop P One', sans-serif;
+    	}
+</style>
+	<section id="banner">
+        <div class="content">
+            <header>
+                {% for post in new %}
+                <h1>{{ request.user }}</h1>
+                <div class="post_detail">
+                {{ post.created_date }}
+                <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.post }}</a></h2>
+                {% if post.image %}
+                    <a  href="{% url 'post_detail' pk=post.pk %}"  class="image" > <img src="{{ post.image.url }}" style="width: 400px; height: auto; padding: 10px;" ></a>
+                {% else %}
+                    <a  href="{% url 'post_detail' pk=post.pk %}" class="image"> <img src="{% static 'default.jpg' %}" style="width: 400px; height: auto; padding: 10px;"></a>
+                {% endif %}
+                <p>{{ post.text|linebreaksbr }}</p>
+                    <div id="favourite-section"><a href="{% url 'favourite_add' post.id %}" class="btn btn-outline-primary">Remove</a></div>
+                </div>
+                {% endfor %}
+            </header>
+            <p style="padding: 15px;"> {{ request.user.favourite }} </p>
+
+        </div>
+        <span class="image object">
+            {% if user.image %}
+                <img src="{{ request.user.image.url }}" style="width: 300px; height: auto; padding: 15px;" style="width: 500px; height: 500px" alt="" />
+            {% else %}
+                <img src="{% static 'default.jpg' %}" style="width: 300px; height: auto; padding: 15px;" alt="" />
+            {% endif %}
+        </span>
+    </section>
+{% endblock %}
