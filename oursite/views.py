@@ -7,13 +7,12 @@ from django.utils import timezone
 from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpResponse
+from django.http import HttpResponseRedirect
 
 from .forms import CommentForm, ImageForm, PostForm
 from .models import Post, Comment, Image
 from .forms import UpdatePostForm
 from .permissions import UserHasPermissionMixin
-from cart.cart import Cart
 
 
 class PostListView(ListView):
@@ -165,19 +164,3 @@ def LikeView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     post.likes.add(request.user)
     return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))
-
-
-def favourite_add(request, id):
-    post = get_object_or_404(Post, id=id)
-    if post.favourites.filter(id=request.user.id).exists():
-        post.favourites.remove(request.user)
-    else:
-        post.favourites.add(request.user)
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-
-def favourite_list(request):
-    new = Post.newmanager.filter(favourites=request.user)
-    return render(request,
-                  'favourites.html',
-                  {'new': new})

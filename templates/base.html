@@ -74,7 +74,7 @@
 						<li><a href="{% url 'home' %}?filter=new">New posts</a></li>
 						{% if request.user.is_authenticated %}
 						<li><a href="{% url 'profile' %}">My Profile</a></li>
-
+						<li><a href="{% url 'favourite_list' %}">Favourites</a></li>
 						{% endif %}
 					</ul>
 				</section>
