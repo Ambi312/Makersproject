@@ -11,7 +11,7 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
-from .forms import CommentForm, UserPostRelationForm
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
@@ -20,7 +20,6 @@ from .forms import CreatePostForm, UpdatePostForm
 
 from .models import Post, Comment
 
-from .models import Post, UserPostRelation
 
 from .permissions import UserHasPermissionMixin
 from cart.cart import Cart
@@ -125,18 +124,6 @@ class PostDeleteView(UserHasPermissionMixin, DeleteView):
         return redirect('/', )
 
 
-class UserPostRelationView(UpdateModelMixin, GenericViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = UserPostRelation.objects.all()
-    serializer_class = UserPostRelationForm
-    lookup_field = 'post'
-
-    def get_object(self):
-        obj, _ = UserPostRelation.objects.get_or_create(user=self.user,
-                                                        post_id=self.kwargs['post'])
-        return obj
-
-
 def post_detail(request, slug):
     template_name = 'post_detail.html'
     post = get_object_or_404(Post, slug=slug)
@@ -166,7 +153,7 @@ def post_detail(request, slug):
 @login_required()
 def cart_add(request, id):
     cart = Cart(request)
-    product = Product.objects.get(id=id)
+    product = Post.objects.get(id=id)
     cart.add(product=product)
     return redirect("index")
 
@@ -174,7 +161,7 @@ def cart_add(request, id):
 @login_required()
 def item_clear(request, id):
     cart = Cart(request)
-    product = Product.objects.get(id=id)
+    product = Post.objects.get(id=id)
     cart.remove(product)
     return redirect("cart_detail")
 
@@ -182,7 +169,7 @@ def item_clear(request, id):
 @login_required()
 def item_increment(request, id):
     cart = Cart(request)
-    product = Product.objects.get(id=id)
+    product = Post.objects.get(id=id)
     cart.add(product=product)
     return redirect("cart_detail")
 
@@ -190,7 +177,7 @@ def item_increment(request, id):
 @login_required()
 def item_decrement(request, id):
     cart = Cart(request)
-    product = Product.objects.get(id=id)
+    product = Post.objects.get(id=id)
     cart.decrement(product=product)
     return redirect("cart_detail")
 
