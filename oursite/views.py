@@ -1,22 +1,17 @@
 from datetime import timedelta
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpResponse
 
-from rest_framework.mixins import UpdateModelMixin
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import GenericViewSet
-
-from .forms import UpdatePostForm, CommentForm, ImageForm, PostForm
+from .forms import CommentForm, ImageForm, PostForm
 from .models import Post, Comment, Image
-from .forms import CreatePostForm, UpdatePostForm
+from .forms import UpdatePostForm
 from .permissions import UserHasPermissionMixin
 from cart.cart import Cart
 
@@ -172,46 +167,17 @@ def LikeView(request, pk):
     return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))
 
 
-@login_required()
-def cart_add(request, id):
-    cart = Cart(request)
-    product = Post.objects.get(id=id)
-    cart.add(product=product)
-    return redirect("index")
+def favourite_add(request, id):
+    post = get_object_or_404(Post, id=id)
+    if post.favourites.filter(id=request.user.id).exists():
+        post.favourites.remove(request.user)
+    else:
+        post.favourites.add(request.user)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
-@login_required()
-def item_clear(request, id):
-    cart = Cart(request)
-    product = Post.objects.get(id=id)
-    cart.remove(product)
-    return redirect("cart_detail")
-
-
-@login_required()
-def item_increment(request, id):
-    cart = Cart(request)
-    product = Post.objects.get(id=id)
-    cart.add(product=product)
-    return redirect("cart_detail")
-
-
-@login_required()
-def item_decrement(request, id):
-    cart = Cart(request)
-    product = Post.objects.get(id=id)
-    cart.decrement(product=product)
-    return redirect("cart_detail")
-
-
-@login_required()
-def cart_clear(request):
-    cart = Cart(request)
-    cart.clear()
-    return redirect("cart_detail")
-
-
-@login_required()
-def cart_detail(request):
-    return render(request, 'cart/cart_detail.html')
-
+def favourite_list(request):
+    new = Post.newmanager.filter(favourites=request.user)
+    return render(request,
+                  'favourites.html',
+                  {'new': new})

@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
     # my app
     'account',
     'oursite',
@@ -65,6 +66,7 @@ TEMPLATES = [
     },
 ]
 
+CART_SESSION_ID = 'cart'
 WSGI_APPLICATION = 'mem.wsgi.application'
 
 

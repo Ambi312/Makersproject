@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    *{
+    	font-family: 'Mochiy Pop P One', sans-serif;
+    	}
+</style>
+	<section id="banner">
+        <div class="content">
+            <header>
+                <h1>{{ request.user }}</h1>
+                    <!--<p>A free and fully responsive site template</p>-->
+            </header>
+            <p style="padding: 15px;"> {{ request.favourites }} </p>
+
+
+
+        </div>
+        <span class="image object">
+            {% if post.image %}
+                <img src="{{ post.image.url }}" style="width: 300px; height: auto; padding: 15px;" style="width: 500px; height: 500px" alt="" />
+            {% else %}
+                <img src="{% static 'default.jpg' %}" style="width: 300px; height: auto; padding: 15px;" alt="" />
+            {% endif %}
+        </span>
+    </section>
+{% endblock %}
