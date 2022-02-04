@@ -8,5 +8,6 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=200)
     image = models.ImageField(upload_to='users')
 
+
     def __str__(self):
         return self.get_full_name()

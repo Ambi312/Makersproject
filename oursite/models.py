@@ -47,3 +47,15 @@ class Comment(models.Model):
     def __str__(self):
         return 'Comment {} by {}'.format(self.post, self.title)
 
+
+class UserPostRelation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    like = models.BooleanField(default=False)
+    favorites = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.user.username}: {self.post}'
+
+
+
