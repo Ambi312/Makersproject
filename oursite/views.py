@@ -1,35 +1,19 @@
 from datetime import timedelta
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
-
-from django.shortcuts import redirect, get_object_or_404
-
-from rest_framework.mixins import UpdateModelMixin
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import GenericViewSet
-
-from .forms import CommentForm, UserPostRelationForm
+from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 
-from .forms import CreatePostForm, UpdatePostForm
-
-from .models import Post, Comment
-
-from .models import Post, UserPostRelation
-
+from .forms import UpdatePostForm, CommentForm, ImageForm, PostForm
+from .models import Post, Comment, Image
 from .permissions import UserHasPermissionMixin
 from cart.cart import Cart
-
-
-def LikeView(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    post.likes.add(request.user)
-    return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))
 
 
 class PostListView(ListView):
@@ -77,28 +61,16 @@ class PostDetailView(DetailView):
         return context
 
 
-class PostCreateView(CreateView):
-    model = Post
-    template_name = 'oursite/create_post.html'
-    form_class = CreatePostForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['post_form'] = self.get_form()
-        return context
-
-    def form_valid(self, form):
-        post = form.save(commit=False)
-        post.user = self.request.user
-        post.save()
-        return super(PostCreateView, self).form_valid(form)
-
-
 class CommentCreateView(CreateView):
+    redirect_field_name = 'oursite/post_detail.html'
     model = Comment
     template_name = 'oursite/add_comment.html'
-    # form_class = CreatePostForm
-    fields = '__all__'
+    form_class = CommentForm
+
+    def form_valid(self, form):
+        form.instance.post_id = self.kwargs['pk']
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
     
 class PostUpdateView(UserHasPermissionMixin, UpdateView):
@@ -112,6 +84,15 @@ class PostUpdateView(UserHasPermissionMixin, UpdateView):
         context['post_form'] = self.get_form()
         return context
 
+    # def get_queryset(self, *args, **kwargs):
+    #     return super().get_queryset(*args, **kwargs).filter(
+    #         author__username=self.kwargs['user']
+    #     )
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
 
 class PostDeleteView(UserHasPermissionMixin, DeleteView):
     model = Post
@@ -123,18 +104,6 @@ class PostDeleteView(UserHasPermissionMixin, DeleteView):
         post = self.object.post
         self.object.delete()
         return redirect('/', )
-
-
-class UserPostRelationView(UpdateModelMixin, GenericViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = UserPostRelation.objects.all()
-    serializer_class = UserPostRelationForm
-    lookup_field = 'post'
-
-    def get_object(self):
-        obj, _ = UserPostRelation.objects.get_or_create(user=self.user,
-                                                        post_id=self.kwargs['post'])
-        return obj
 
 
 def post_detail(request, slug):
@@ -161,12 +130,47 @@ def post_detail(request, slug):
                                            'comment_form': comment_form})
 
 
+def post_create(request):
+
+    ImageFormSet = modelformset_factory(Image,
+                                        form=ImageForm, extra=5)
+
+    if request.method == 'POST':
+        postForm = PostForm(request.POST)
+        formset = ImageFormSet(request.POST, request.FILES,
+                               queryset=Image.objects.none())
+
+        if postForm.is_valid() and formset.is_valid():
+            post_form = postForm.save(commit=False)
+            post_form.user = request.user
+            post_form.save()
+
+            for form in formset.cleaned_data:
+                image = form['image']
+                photo = Image(post_image=post_form, image=image)
+                photo.save()
+            messages.success(request,
+                             "Posted!")
+            return HttpResponseRedirect("/")
+        else:
+            print(postForm.errors, formset.errors)
+    else:
+        postForm = PostForm()
+        formset = ImageFormSet(queryset=Image.objects.none())
+    return render(request, 'oursite/create_post.html',
+                  {'postForm': postForm, 'formset': formset})
+
+
+def LikeView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.likes.add(request.user)
+    return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))
 
 
 @login_required()
 def cart_add(request, id):
     cart = Cart(request)
-    product = Product.objects.get(id=id)
+    product = Post.objects.get(id=id)
     cart.add(product=product)
     return redirect("index")
 
@@ -174,7 +178,7 @@ def cart_add(request, id):
 @login_required()
 def item_clear(request, id):
     cart = Cart(request)
-    product = Product.objects.get(id=id)
+    product = Post.objects.get(id=id)
     cart.remove(product)
     return redirect("cart_detail")
 
@@ -182,7 +186,7 @@ def item_clear(request, id):
 @login_required()
 def item_increment(request, id):
     cart = Cart(request)
-    product = Product.objects.get(id=id)
+    product = Post.objects.get(id=id)
     cart.add(product=product)
     return redirect("cart_detail")
 
@@ -190,7 +194,7 @@ def item_increment(request, id):
 @login_required()
 def item_decrement(request, id):
     cart = Cart(request)
-    product = Product.objects.get(id=id)
+    product = Post.objects.get(id=id)
     cart.decrement(product=product)
     return redirect("cart_detail")
 

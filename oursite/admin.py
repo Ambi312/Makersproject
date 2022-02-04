@@ -21,10 +21,3 @@ class ImageInLineAdmin(admin.TabularInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     inlines = [ImageInLineAdmin]
-
-
-
-@admin.register(UserPostRelation)
-class UserPostRelationAdmin(ModelAdmin):
-    pass
-

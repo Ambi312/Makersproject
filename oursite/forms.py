@@ -12,23 +12,26 @@ class CreatePostForm(forms.ModelForm):
 class UpdatePostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ('user',)
+        exclude = ('user', 'likes')
+
+
+class PostForm(forms.ModelForm):
+
+    class Meta:
+        model = Post
+        fields = ('title', 'post')
 
 
 class ImageForm(forms.ModelForm):
+    image = forms.ImageField(label='Image')
+
     class Meta:
         model = Image
-        fields = ('image',)
+        fields = ('image', )
 
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('name', 'email', 'body')
-
-
-class UserPostRelationForm(forms.ModelForm):
-    class Meta:
-        model = UserPostRelation
-        fields = ('post', 'like', 'favorites')
-
+        fields = ('post', 'body')
+        exclude = ('post',)

@@ -3,15 +3,15 @@
 {% block content %}
 
 
-<div styckground-color: #ff8732; height: 150px; ">
-</div>
+<div style="sstyckground-color: #ff8732; height: 150px;"></div>
+
 <div class="post_detail">
     {% if post.image %}
         <h2>{{ post.post }}</h2>
         <h4>{{ post.title }}</h4>
         <img src="{{ post.image.url }}" style="width: 300px; height: auto; padding: 10px;">
     {% else %}
-        <img src="{% static 'default.jpg' %}"style="width: 300px; height: auto; padding: 10px;">
+        <img src="{% static 'default.jpg' %}" style="width: 300px; height: auto; padding: 10px;">
     {% endif %}
     {% for image in images %}
         <div class="text-center"><img src="{{ image }}" class="rounded" alt="..."></div>
@@ -26,7 +26,7 @@
     <br/>
     <form action="{% url 'like_post' post.pk %}" method="post">
         {% csrf_token %}
-        <button type="submit", name="post_id", value="{{ post.id }}", class="btn btn-primary btn-sm">
+        <button type="submit"  name="post_id"  value="{{ post.id }}"  class="btn btn-primary btn-sm">
             Like</button>  {{ total_likes }} Likes
     </form>
 
@@ -34,8 +34,9 @@
 
 <h2>Comments...</h2>
 <hr>
+{% if request.user.is_authenticated %}
 {% if not post.comments.all %}
-    no Comments Yet...<a href="{% url 'add_comment' post.pk %}">Add One </a>
+    no Comments Yet...<a href="{% url 'add_comment' post.pk %}">Add One</a>
 {% else %}
          <a href="{% url 'add_comment' post.pk %}">Add Comment</a>
 <br/><br/>
@@ -52,27 +53,8 @@
     {% endfor %}
 {% endif %}
         <br/>
-        <a href="{% url 'add_comment' post.pk %}">Add Comment</a>
         <br/><br/><br/>
+{% endif %}
 </div>
+
 {% endblock %}
-
-
-<div class="card" style="width: 25rem; height: 32rem;">
-    {% if post.image %}
-  <img src="{{ post.image.url }}" class="card-img-top" alt="...">
-     {% else %}
-    <img src="{% static 'default.jpg' %}"style="width: 300px; height: auto; padding: 10px;">
-    {% endif %}
-    {% for image in images %}
-    <img src="{{ image }}" class="rounded" alt="...">
-    {% endfor %}
-  <div class="card-body">
-    <h1 class="card-title">{{ post.post }}</h1>
-    <p class="card-text">{{ post.title }}</p>
-    <a href="{% url 'update' post.id %}"><i class="fas fa-edit"></i></a>
-      <a href="{% url 'delete' post.id %}"><i class="fas fa-trash"></i></a>
-  </div>
-</div>
-
-
