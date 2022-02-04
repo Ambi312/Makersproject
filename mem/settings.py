@@ -28,13 +28,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # my lips
-    'cart',
 
     # my app
     'account',
     'oursite',
-
 
 
 ]

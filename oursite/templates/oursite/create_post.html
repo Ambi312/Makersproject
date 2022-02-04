@@ -2,13 +2,12 @@
 {% load static %}
 {% block content %}
   {% if user.is_authenticated %}
-<form id="post_form" method="post" enctype="multipart/form-data">
 
+<form style="padding: 30px; " id="post_form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% for hidden in postForm.hidden_fields %}
         {{ hidden }}
     {% endfor %}
-
     {% for field in postForm %}
         {{ field }} <br />
     {% endfor %}
