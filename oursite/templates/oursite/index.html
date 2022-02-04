@@ -22,8 +22,8 @@
 					</header>
 					<div class="info">
 						<ul class="stats">
-							<li><a href="{% url 'post_detail' pk=post.pk %}" class="icon fa-comment">{{ post.pk }}</a></li>
-							<li><a href="#" class="icon fa-heart">0</a></li>
+							<li><a href="{% url 'add_comment' post.pk %}" class="icon fa-comment">{{ post.comments.count }}</a></li>
+							<li><a type="submit" class="icon fa-heart">{{ post.likes.count }}</a></li>
 							<li><a href="https://twitter.com/" class="icon brands fa-twitter">122</a></li>
 							<li><a href="https://www.instagram.com/" class="icon brands fa-instagram">333</a></li>
 						</ul>

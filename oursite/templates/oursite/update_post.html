@@ -2,9 +2,25 @@
 
 {% block content %}
     <h1>Update Post</h1>
-  <form method="POST" enctype="multipart/form-data">
+    <form id="post_form" method="post" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {{ post_form.as_p }}
+    {% for hidden in postForm.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+
+    {% for field in postForm %}
+        {{ field }} <br />
+    {% endfor %}
+
+    {{ formset.management_form }}
+    {% for form in formset %}
+        {{ form }}
+    {% endfor %}
+
+
     <button type="submit" class="btn btn-warning">Update</button>
   </form>
+
+
 {% endblock %}
