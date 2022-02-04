@@ -20,21 +20,15 @@
     <a style="padding: 20px" href="{% url 'update' post.id %}"><i class="fas fa-edit"></i></a>
     <a style="padding: 20px" href="{% url 'delete' post.id %}"><i class="fas fa-trash"></i></a>
     {% endif %}
-    <div class="col-md-7 d-flex justify-content-between">
-        <h3>{{ post.title }}</h3>
-    <a href="{% url 'favourite_add' post.id %}" class="btn btn-outline-primary">Add To Favourites</a>
-    </div>
     <h5 style="padding: 20px">{{ post.created_date }}</h5>
 <br/><br/>
     <hr>
     <br/>
-    {% if request.user.is_authenticated %}
     <form action="{% url 'like_post' post.pk %}" method="post">
         {% csrf_token %}
         <button type="submit"  name="post_id"  value="{{ post.id }}"  class="btn btn-primary btn-sm">
             Like</button>  {{ total_likes }} Likes
     </form>
-    {% endif %}
 
     <br/><br/>
 
@@ -42,7 +36,7 @@
 <hr>
 {% if request.user.is_authenticated %}
 {% if not post.comments.all %}
-    no Comments Yet...<a href="{% url 'add_comment' post.pk %}"style="padding: 15px">Add One</a>
+    no Comments Yet..<a href="{% url 'add_comment' post.pk %}"style="padding: 15px">Add One</a>
 {% else %}
          <a  href="{% url 'add_comment' post.pk %}"style="padding: 15px">Add Comment</a>
 <br/><br/>

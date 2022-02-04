@@ -1,21 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Update Post</h1>
-    <form id="post_form" method="post" action="" enctype="multipart/form-data">
+    <form style="padding: 40px;" id="post_form" method="post" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {{ post_form.as_p }}
     {% for hidden in postForm.hidden_fields %}
-        {{ hidden }}
+       <p> {{ hidden }}</p>
     {% endfor %}
 
     {% for field in postForm %}
-        {{ field }} <br />
+        <p>{{ field }} <br /></p>
     {% endfor %}
 
     {{ formset.management_form }}
     {% for form in formset %}
-        {{ form }}
+       <p>{{ form }}</p>
     {% endfor %}
 
 
