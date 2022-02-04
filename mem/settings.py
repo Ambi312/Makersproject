@@ -27,8 +27,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # my lips
     'cart',
+
     # my app
     'account',
     'oursite',
@@ -67,6 +69,7 @@ TEMPLATES = [
     },
 ]
 
+CART_SESSION_ID = 'cart'
 WSGI_APPLICATION = 'mem.wsgi.application'
 
 
@@ -126,7 +129,6 @@ STATICFILES_DIRS = (
 MEDIA_URl = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-AUTHENTICATION_BACKENDS = 'social.backends.facebook.Facebook2OAuth2',
 
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587
