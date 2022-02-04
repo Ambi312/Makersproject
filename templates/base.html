@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap" rel="stylesheet">
-
 	<style>
 
 
@@ -77,22 +76,9 @@
 						<li><a href="{% url 'home' %}?filter=new">New posts</a></li>
 						{% if request.user.is_authenticated %}
 						<li><a href="{% url 'profile' %}">My Profile</a></li>
-						{% endif %}
-						<li><a href="#">Sed dolore magna</a></li>
-						<li><a href="#">Malesuada commodo</a></li>
-						<li><a href="#">Ipsum metus nullam</a></li>
-					</ul>
-				</section>
+						<li><a href="#">Favourites</a></li>
 
-			<!-- Recent Comments -->
-				<section class="box recent-comments">
-					<header>
-						<h2>Recent Comments</h2>
-					</header>
-					<ul>
-						<li>case on <a href="#">Lorem ipsum dolor</a></li>
-						<li>molly on <a href="#">Sed dolore magna</a></li>
-						<li>case on <a href="#">Sed dolore magna</a></li>
+						{% endif %}
 					</ul>
 				</section>
 
