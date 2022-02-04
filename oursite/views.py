@@ -1,14 +1,29 @@
 from datetime import timedelta
+
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
+
 from django.shortcuts import redirect, get_object_or_404
+
+from rest_framework.mixins import UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import GenericViewSet
+
+from .forms import CommentForm, UserPostRelationForm
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 
 from .forms import CreatePostForm, UpdatePostForm
+
 from .models import Post, Comment
+
+from .models import Post, UserPostRelation
+
 from .permissions import UserHasPermissionMixin
+from cart.cart import Cart
 
 
 def LikeView(request, pk):
@@ -85,7 +100,7 @@ class CommentCreateView(CreateView):
     # form_class = CreatePostForm
     fields = '__all__'
 
-
+    
 class PostUpdateView(UserHasPermissionMixin, UpdateView):
     model = Post
     template_name = 'oursite/update_post.html'
@@ -108,3 +123,86 @@ class PostDeleteView(UserHasPermissionMixin, DeleteView):
         post = self.object.post
         self.object.delete()
         return redirect('/', )
+
+
+class UserPostRelationView(UpdateModelMixin, GenericViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = UserPostRelation.objects.all()
+    serializer_class = UserPostRelationForm
+    lookup_field = 'post'
+
+    def get_object(self):
+        obj, _ = UserPostRelation.objects.get_or_create(user=self.user,
+                                                        post_id=self.kwargs['post'])
+        return obj
+
+
+def post_detail(request, slug):
+    template_name = 'post_detail.html'
+    post = get_object_or_404(Post, slug=slug)
+    comments = post.comments.filter(active=True)
+    new_comment = None
+    # Comment posted
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            # Create Comment object but don't save to database yet
+            new_comment = comment_form.save(commit=False)
+            # Assign the current post to the comment
+            new_comment.post = post
+            # Save the comment to the database
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+
+    return render(request, template_name, {'post': post,
+                                           'comments': comments,
+                                           'new_comment': new_comment,
+                                           'comment_form': comment_form})
+
+
+
+
+@login_required()
+def cart_add(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.add(product=product)
+    return redirect("index")
+
+
+@login_required()
+def item_clear(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.remove(product)
+    return redirect("cart_detail")
+
+
+@login_required()
+def item_increment(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.add(product=product)
+    return redirect("cart_detail")
+
+
+@login_required()
+def item_decrement(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.decrement(product=product)
+    return redirect("cart_detail")
+
+
+@login_required()
+def cart_clear(request):
+    cart = Cart(request)
+    cart.clear()
+    return redirect("cart_detail")
+
+
+@login_required()
+def cart_detail(request):
+    return render(request, 'cart/cart_detail.html')
+

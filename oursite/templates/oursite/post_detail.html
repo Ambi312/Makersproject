@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 
+
 <div styckground-color: #ff8732; height: 150px; ">
 </div>
 <div class="post_detail">
@@ -55,5 +56,23 @@
         <br/><br/><br/>
 </div>
 {% endblock %}
+
+
+<div class="card" style="width: 25rem; height: 32rem;">
+    {% if post.image %}
+  <img src="{{ post.image.url }}" class="card-img-top" alt="...">
+     {% else %}
+    <img src="{% static 'default.jpg' %}"style="width: 300px; height: auto; padding: 10px;">
+    {% endif %}
+    {% for image in images %}
+    <img src="{{ image }}" class="rounded" alt="...">
+    {% endfor %}
+  <div class="card-body">
+    <h1 class="card-title">{{ post.post }}</h1>
+    <p class="card-text">{{ post.title }}</p>
+    <a href="{% url 'update' post.id %}"><i class="fas fa-edit"></i></a>
+      <a href="{% url 'delete' post.id %}"><i class="fas fa-trash"></i></a>
+  </div>
+</div>
 
 

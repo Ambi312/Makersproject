@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Are you sure you want to delete {{ post.post }}?</h1>
+<style>
+    *{
+    	font-family: 'Mochiy Pop P One', sans-serif;
+    	}
+</style>
+  <h1 > Are you sure you want to delete {{ post.post }}?</h1>
 <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Yes</button>

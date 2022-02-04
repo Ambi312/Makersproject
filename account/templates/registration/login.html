@@ -1,11 +1,25 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
+<style>
+body {
+            background-color: #bdbebd
+            }
+          a {
+            text-decoration: none;
+            color: black;
+            transition: 0.8s;
+            }
+          a:hover {
+            color: brown;
+            transition: 0.5s;
+            }
+</style>
 <form method="post" >
   {% csrf_token %}
-  {{ form.as_p }}
+  <p>{{ form.as_p }}</p>
   <button type="submit" class="btn-info">Log in</button>
+    </div>
 </form>
 
 {% endblock %}
