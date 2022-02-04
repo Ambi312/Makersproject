@@ -32,22 +32,21 @@
 
     <br/><br/>
 
-<h2>Comments...</h2>
+<h2 style="padding: 15px">Comments...</h2>
 <hr>
 {% if request.user.is_authenticated %}
 {% if not post.comments.all %}
-    no Comments Yet...<a href="{% url 'add_comment' post.pk %}">Add One</a>
+    no Comments Yet...<a href="{% url 'add_comment' post.pk %}"style="padding: 15px">Add One</a>
 {% else %}
-         <a href="{% url 'add_comment' post.pk %}">Add Comment</a>
+         <a  href="{% url 'add_comment' post.pk %}"style="padding: 15px">Add Comment</a>
 <br/><br/>
-
     {% for comment in post.comments.all %}
-        <strong>
+        <strong style="padding: 30px">
         {{ comment.name }}
         {{ comment.created_on }}
         </strong>
         <br/>
-        {{ comment.body }}
+    <a style="padding: 30px">{{ comment.body }}</a>
         <br/>
         <hr>
     {% endfor %}
