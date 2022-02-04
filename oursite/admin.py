@@ -24,7 +24,5 @@ class PostAdmin(admin.ModelAdmin):
 
 
 
-@admin.register(UserPostRelation)
-class UserPostRelationAdmin(ModelAdmin):
-    pass
+
 

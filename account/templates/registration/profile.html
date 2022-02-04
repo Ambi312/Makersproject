@@ -12,17 +12,17 @@
                 <h1>{{ request.user }}</h1>
                     <!--<p>A free and fully responsive site template</p>-->
             </header>
-            <p> {{ request.user }} </p>
-            <p> {{ request.user.name }} </p>
-            <p> {{ request.user.email }} </p>
+            <p style="padding: 15px;"> {{ request.user }} </p>
+            <p style="padding: 15px;"> {{ request.user.name }} </p>
+            <p style="padding: 15px;"> {{ request.user.email }} </p>
 
 
         </div>
         <span class="image object">
             {% if user.image %}
-                <img src="{{ request.user.image.url }}" style="width: 500px; height: 500px" alt="" />
+                <img src="{{ request.user.image.url }}" style="width: 300px; height: auto; padding: 15px;" style="width: 500px; height: 500px" alt="" />
             {% else %}
-                <img src="{% static 'default.jpg' %}" style="width: 200px; height: auto" alt="" />
+                <img src="{% static 'default.jpg' %}" style="width: 300px; height: auto; padding: 15px;" alt="" />
             {% endif %}
         </span>
     </section>
