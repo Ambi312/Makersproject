@@ -1,12 +1,19 @@
 from datetime import timedelta
+
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils import timezone
-from .forms import CommentForm
+from rest_framework.mixins import UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import GenericViewSet
+
+from .forms import CommentForm, UserPostRelationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import CreatePostForm, UpdatePostForm
-from .models import Post
+from .models import Post, UserPostRelation
 from .permissions import UserHasPermissionMixin
+from cart.cart import Cart
 
 
 class PostListView(ListView):
@@ -68,7 +75,6 @@ class PostCreateView(CreateView):
         return super(PostCreateView, self).form_valid(form)
 
 
-
 class PostUpdateView(UserHasPermissionMixin, UpdateView):
     model = Post
     template_name = 'oursite/update_post.html'
@@ -91,6 +97,18 @@ class PostDeleteView(UserHasPermissionMixin, DeleteView):
         post = self.object.post
         self.object.delete()
         return redirect('/', )
+
+
+class UserPostRelationView(UpdateModelMixin, GenericViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = UserPostRelation.objects.all()
+    serializer_class = UserPostRelationForm
+    lookup_field = 'post'
+
+    def get_object(self):
+        obj, _ = UserPostRelation.objects.get_or_create(user=self.user,
+                                                        post_id=self.kwargs['post'])
+        return obj
 
 
 def post_detail(request, slug):
@@ -119,3 +137,45 @@ def post_detail(request, slug):
 
 
 
+@login_required()
+def cart_add(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.add(product=product)
+    return redirect("index")
+
+
+@login_required()
+def item_clear(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.remove(product)
+    return redirect("cart_detail")
+
+
+@login_required()
+def item_increment(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.add(product=product)
+    return redirect("cart_detail")
+
+
+@login_required()
+def item_decrement(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.decrement(product=product)
+    return redirect("cart_detail")
+
+
+@login_required()
+def cart_clear(request):
+    cart = Cart(request)
+    cart.clear()
+    return redirect("cart_detail")
+
+
+@login_required()
+def cart_detail(request):
+    return render(request, 'cart/cart_detail.html')
