@@ -12,7 +12,7 @@ class CreatePostForm(forms.ModelForm):
 class UpdatePostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ('user', 'likes')
+        exclude = ('user', 'likes', 'favourites')
 
 
 class PostForm(forms.ModelForm):

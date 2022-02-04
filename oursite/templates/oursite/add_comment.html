@@ -2,13 +2,13 @@
 {% load static %}
 {% block content %}
   {% if user.is_authenticated %}
-  <h1 style="">Add Comment...</h1>
+  <p style="">Add Comment</p>
   <br/><br/>
   <form method="post">
 
     {% csrf_token %}
     <br/><br/><br/>
-    {{ form.as_p }}
+    <p>{{ form.as_p }}</p>
 
     <button  type="submit" class="btn btn-success">Comment</button>
   </form>
