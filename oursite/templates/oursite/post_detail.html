@@ -17,14 +17,15 @@
         <div><img src="{{ image }}" style="width: 800px; height: auto; padding: 30px;" class="rounded" alt="..."></div>
     {% endfor %}
     {% if request.user.is_authenticated and post.user == request.user  %}
-    <a style="padding: 20px" href="{% url 'update' post.id %}"><i class="fas fa-edit"></i></a>
-    <a style="padding: 20px" href="{% url 'delete' post.id %}"><i class="fas fa-trash"></i></a>
-    <p>class="col-md-7 d-flex justify-content-between">
-        <h3>{{ post.title }}</h3>
-    <a href="{% url 'favourite_add' post.id %}" class="btn btn-outline-primary">Add To Favourites</a>
+    <a style="padding: 30px" href="{% url 'update' post.id %}"><i class="fas fa-edit"></i></a>
+    <a style="padding: 10px" href="{% url 'delete' post.id %}"><i class="fas fa-trash"></i></a>
+    <p style="padding 20px"; class="col-md-7 d-flex justify-content-between">
+        <h3 style="padding 30px;">{{ post.title }}</h3>
         {% endif %}
     </p>
     <h5 style="padding: 20px">{{ post.created_date }}</h5>
+    <a style="padding: 20px" href="{% url 'favourite_add' post.id %}" class="btn btn-outline-primary">Add To Favourites</a>
+
 <br/><br/>
     <hr>
     <br/>
