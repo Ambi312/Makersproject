@@ -10,8 +10,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 
+from rest_framework.mixins import UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import GenericViewSet
+
 from .forms import UpdatePostForm, CommentForm, ImageForm, PostForm
 from .models import Post, Comment, Image
+from .forms import CreatePostForm, UpdatePostForm
 from .permissions import UserHasPermissionMixin
 from cart.cart import Cart
 

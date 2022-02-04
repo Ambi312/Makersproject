@@ -13,6 +13,7 @@ class Post(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='blog_posts', blank=True)
 
+
     def total_likes(self):
         return self.likes.count()
 
@@ -47,5 +48,7 @@ class Comment(models.Model):
     def __str__(self):
         return 'Comment {} by {}'.format(self.body, self.name)
 
+
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'pk': self.post_id})
+

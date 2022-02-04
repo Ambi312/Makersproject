@@ -4,20 +4,24 @@
 {% for post in posts %}
 <article class="box post post-excerpt">
     <header>
-        <h2><a href="{% url 'post_detail' pk=post.pk %}" style="padding: 10px">{{ post }}</a></h2>
-        <a  href="{% url 'post_detail' pk=post.pk %}" class="image"> <img src="{{ post.image.url }}" style="width: 300px; height: auto; padding: 10px;" ></a>
+        <h2 style="padding: 10px" ><a href="{% url 'post_detail' pk=post.pk %}" style="padding: 10px">{{ post }}</a></h2>
+        <a  style="padding: 10px" href="{% url 'post_detail' pk=post.pk %}" class="image"> <img src="{{ post.image.url }}" style="width: 300px; height: auto; padding: 10px;" ></a>
     </header>
 <div style="width: 700px; height: auto;" class="row row-cols-1 row-cols-md-2 g-4">
   <div  class="col">
     <div class="card">
-      <img src="{{ post.image.url }}" class="card-img-top" alt="...">
+      <img style="padding: 10px" src="{{ post.image.url }}" class="card-img-top" alt="...">
       <div class="card-body">
-        <h5 class="card-title">{{ post }}</h5>
+        <h5  class="card-title">{{ post }}</h5>
         <p class="card-text">{{ post.title }}</p>
+
       </div>
     </div>
   </div>
 </div>
-    </article>
+
+</article>
     {% endfor %}
 {% endblock %}
+
+

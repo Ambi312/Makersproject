@@ -1,23 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<style>
-		 *{
-    font-family: 'Mochiy Pop P One', sans-serif;
-    }
-        body {
-            background-color: #bdbebd
-            }
-          a {
-            text-decoration: none;
-            color: black;
-            transition: 0.8s;
-            }
-          a:hover {
-            color: brown;
-            transition: 0.5s;
-            }
-</style>
   {% if user.is_authenticated %}
 <form id="post_form" method="post" enctype="multipart/form-data">
 

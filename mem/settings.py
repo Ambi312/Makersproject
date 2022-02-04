@@ -126,6 +126,7 @@ STATICFILES_DIRS = (
 MEDIA_URl = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+AUTHENTICATION_BACKENDS = 'social.backends.facebook.Facebook2OAuth2',
 
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587
