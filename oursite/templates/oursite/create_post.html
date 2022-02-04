@@ -3,22 +3,22 @@
 {% block content %}
   {% if user.is_authenticated %}
 
-<form style="padding: 30px; " id="post_form" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% for hidden in postForm.hidden_fields %}
-        {{ hidden }}
+<form method="post" style="padding: 30px;" id="postform"  enctype="multipart/form-data">
+
+       {% csrf_token %}
+   {% for hidden in post_form.hidden_fields %}
+       <p>{{ hidden }}</p>
     {% endfor %}
     {% for field in postForm %}
-        {{ field }} <br />
+     <p style="padding: 5px; font-size:200%;">  {{ field }}</p>
     {% endfor %}
-
-    {{ formset.management_form }}
+    <p style="padding: 20px; ">{{ formset.management_form }}</p>
     {% for form in formset %}
         {{ form }}
     {% endfor %}
 
+    <p style="padding: 30px;"><input type="submit" name="submit" value="Submit" /></p>
 
-    <input type="submit" name="submit" value="Submit" />
 </form>
 {% endif %}
 {% endblock %}
