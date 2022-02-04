@@ -1,12 +1,20 @@
 from datetime import timedelta
 from django.db.models import Q
+from django.urls import reverse
 from django.utils import timezone
-from .forms import CommentForm
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.http import HttpResponseRedirect
+
 from .forms import CreatePostForm, UpdatePostForm
-from .models import Post
+from .models import Post, Comment
 from .permissions import UserHasPermissionMixin
+
+
+def LikeView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.likes.add(request.user)
+    return HttpResponseRedirect(reverse('post_detail', args=[str(pk)]))
 
 
 class PostListView(ListView):
@@ -47,7 +55,10 @@ class PostDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         image = self.get_object().image
+        likes = get_object_or_404(Post, id=self.kwargs['pk'])
+        total_likes = likes.total_likes()
         context['images'] = self.get_object().images.all()
+        context['total_likes'] = total_likes
         return context
 
 
@@ -67,6 +78,12 @@ class PostCreateView(CreateView):
         post.save()
         return super(PostCreateView, self).form_valid(form)
 
+
+class CommentCreateView(CreateView):
+    model = Comment
+    template_name = 'oursite/add_comment.html'
+    # form_class = CreatePostForm
+    fields = '__all__'
 
 
 class PostUpdateView(UserHasPermissionMixin, UpdateView):
@@ -91,31 +108,3 @@ class PostDeleteView(UserHasPermissionMixin, DeleteView):
         post = self.object.post
         self.object.delete()
         return redirect('/', )
-
-
-def post_detail(request, slug):
-    template_name = 'post_detail.html'
-    post = get_object_or_404(Post, slug=slug)
-    comments = post.comments.filter(active=True)
-    new_comment = None
-    # Comment posted
-    if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            # Create Comment object but don't save to database yet
-            new_comment = comment_form.save(commit=False)
-            # Assign the current post to the comment
-            new_comment.post = post
-            # Save the comment to the database
-            new_comment.save()
-    else:
-        comment_form = CommentForm()
-
-    return render(request, template_name, {'post': post,
-                                           'comments': comments,
-                                           'new_comment': new_comment,
-                                           'comment_form': comment_form})
-
-
-
-
