@@ -132,21 +132,18 @@ def post_detail(request, slug):
 def post_create(request):
 
     ImageFormSet = modelformset_factory(Image,
-                                        form=ImageForm, extra=5)
-
+                                        form=ImageForm, extra=4)
     if request.method == 'POST':
         postForm = PostForm(request.POST)
         formset = ImageFormSet(request.POST, request.FILES,
                                queryset=Image.objects.none())
-
         if postForm.is_valid() and formset.is_valid():
             post_form = postForm.save(commit=False)
             post_form.user = request.user
             post_form.save()
-
             for form in formset.cleaned_data:
                 image = form['image']
-                photo = Image(post_image=post_form, image=image)
+                photo = Image(post_image=post_form, image=image,)
                 photo.save()
             messages.success(request,
                              "Posted!")

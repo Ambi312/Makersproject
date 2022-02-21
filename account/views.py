@@ -34,7 +34,8 @@ class SingInView(LoginView):
     template_name = 'registration/login.html'
     success_url = reverse_lazy('home')
 
-@ login_required
+
+@login_required
 def favourite_add(request, id):
     post = get_object_or_404(Post, id=id)
     if post.favourites.filter(id=request.user.id).exists():
@@ -43,7 +44,8 @@ def favourite_add(request, id):
         post.favourites.add(request.user)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-@ login_required
+
+@login_required
 def favourite_list(request):
     new = Post.objects.filter(favourites=request.user)
     return render(request, 'registration/favourites.html', {'new': new})
